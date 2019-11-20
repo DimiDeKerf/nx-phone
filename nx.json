@@ -16,6 +16,9 @@
     },
     "phone-api": {
       "tags": []
+    },
+    "model": {
+      "tags": []
     }
   }
 }
