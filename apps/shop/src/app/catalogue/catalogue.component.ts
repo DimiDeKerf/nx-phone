@@ -18,7 +18,6 @@ export class CatalogueComponent implements OnInit {
 
   ngOnInit() {
     this.phones$ = this.phoneService.get();
-    this.phones$.subscribe(phones => console.log(phones));
   }
 
 }
