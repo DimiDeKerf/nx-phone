@@ -21,8 +21,13 @@
             "polyfills": "apps/shop/src/polyfills.ts",
             "tsConfig": "apps/shop/tsconfig.app.json",
             "aot": false,
-            "assets": ["apps/shop/src/favicon.ico", "apps/shop/src/assets"],
-            "styles": ["apps/shop/src/styles.scss"],
+            "assets": [
+              "apps/shop/src/favicon.ico",
+              "apps/shop/src/assets"
+            ],
+            "styles": [
+              "apps/shop/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -60,7 +65,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "shop:build"
+            "browserTarget": "shop:build",
+            "proxyConfig": "apps/shop/proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -81,7 +87,10 @@
               "apps/shop/tsconfig.app.json",
               "apps/shop/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/shop/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/shop/**"
+            ]
           }
         },
         "test": {
@@ -115,8 +124,72 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/shop-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/shop-e2e/**"]
+            "tsConfig": [
+              "apps/shop-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/shop-e2e/**"
+            ]
+          }
+        }
+      }
+    },
+    "phone-api": {
+      "root": "apps/phone-api",
+      "sourceRoot": "apps/phone-api/src",
+      "projectType": "application",
+      "prefix": "phone-api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/phone-api",
+            "main": "apps/phone-api/src/main.ts",
+            "tsConfig": "apps/phone-api/tsconfig.app.json",
+            "assets": [
+              "apps/phone-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/phone-api/src/environments/environment.ts",
+                  "with": "apps/phone-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "phone-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/phone-api/tsconfig.app.json",
+              "apps/phone-api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/phone-api/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/phone-api/jest.config.js",
+            "tsConfig": "apps/phone-api/tsconfig.spec.json"
           }
         }
       }
