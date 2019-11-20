@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PhoneService } from '../core/phone.service';
-import { Phone } from '../model/phone';
+import { Phone } from '@nx-phone/model';
 import { Observable } from 'rxjs';
 
 @Component({

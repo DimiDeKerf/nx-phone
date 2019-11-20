@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Phone } from '../model/phone';
-import { Observable, of } from 'rxjs';
+import { Phone } from '@nx-phone/model';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Phone } from './model/phone';
+import { Phone } from '@nx-phone/model';
 
 @Injectable()
 export class PhoneService {
