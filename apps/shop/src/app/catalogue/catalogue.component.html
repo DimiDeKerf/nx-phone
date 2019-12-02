@@ -3,8 +3,11 @@
     <span class="card__title">{{phone.name}}</span>
     <img class="card__image" src="assets/phone.png" [alt]="phone.name">
     <span>{{phone.price | currency}}</span>
-    <nx-phone-nx-button class="card__button">
+    <nx-phone-nx-button class="card__button" *ngIf="phone.stock > 0; else outOfStuck">
       Add to cart
     </nx-phone-nx-button>
+    <ng-template #outOfStuck>
+      Out of stock...
+    </ng-template>
   </div>
 </div>
