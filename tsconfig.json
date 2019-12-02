@@ -16,7 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-phone/model": ["libs/model/src/index.ts"]
+      "@nx-phone/model": ["libs/model/src/index.ts"],
+      "@nx-phone/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
