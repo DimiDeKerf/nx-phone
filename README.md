@@ -2,83 +2,90 @@
 
 This project was generated using [Nx](https://nx.dev).
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/nx-logo.png" width="450"></p>
+<p align="center"><img src="assets/nx-logo.png" width="450"></p>
 
 🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
 
-## Quick Start & Documentation
+This is an example workspace showing the capabilities of Nx. The workspace contains three apps and two libs.
+Inside the apps you can find two Angular apps, shop and stock, that are part of our imaginary phone company. The third one is a NestJS app that feeds both our Angular apps with data.
 
-[Nx Documentation](https://nx.dev/angular)
+The libs contain a general model that's being used accross the different apps and a UI lib that contains reusable components for our Angular applications.
 
-[10-minute video showing all Nx features](https://nx.dev/angular/getting-started/what-is-nx)
+## Step by step guide
+Here are the steps that I've took to create the workspace. We only focus on the CLI commands here. I've included links to specifics commits to give you an idea what the CLI is doing for us.
 
-[Interactive Tutorial](https://nx.dev/angular/tutorial/01-create-application)
+### Prerequisites
+Having the Angular CLI installed will be convenient to run the commands later on. You can find it [here](https://cli.angular.io/);
 
-## Adding capabilities to your workspace
+### Creating the workspace
+We'll start off by using Nx to scaffold our workspace. This can be done using the following command:
+```
+npx create-nx-workspace@latest nx-phone
+```
+I’ve chosen the empty workspace to show you all the steps, but you can opt for another one to save you a few commands later on. I'm using the Angular CLI because I’ve got that one installed already.
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+[Inital commit](https://github.com/DimiDeKerf/nx-phone/commit/23590bf48a38e63b32bbc7b22487b107d15f5702)
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+### Shop
+Let’s start with adding a Angular app for our shop. First we’ll need to add the Angular capability to our workspace provided by nrwl:
+```
+npm install --save-dev @nrwl/angular
+```
+Next up we're going to add the Angular shop app:
 
-Below are some plugins which you can add to your workspace:
+```
+ng g @nrwl/angular:application shop
+```
+[Related commits](https://github.com/DimiDeKerf/nx-phone/compare/23590bf...330bb3b)
 
-- [Angular](https://angular.io)
-  - `ng add @nrwl/angular`
-- [React](https://reactjs.org)
-  - `ng add @nrwl/react`
-- Web (no framework frontends)
-  - `ng add @nrwl/web`
-- [Nest](https://nestjs.com)
-  - `ng add @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `ng add @nrwl/express`
-- [Node](https://nodejs.org)
-  - `ng add @nrwl/node`
+### API
+The backend will be a NestJS app. It will be a simple app that returns a static list of phones and exposes them over `/api/phones` endpoint.
+Just like with Angular, we first have to include the Nest capability to our workspace:
+```
+npm install --save-dev @nrwl/nest
+```
 
-## Generate an application
+Great! Now we need to add the NestJS app itself to the workspace.
 
-Run `ng g @nrwl/angular:app my-app` to generate an application.
+```
+ng g @nrwl/nest:application phone-api --frontend-project shop
+```
+The `--frontend-project` flag will configure a proxy for our frontend, so we don't have to deal with CORS later on.
 
-> You can use any of the plugins above to generate applications as well.
+[Related commits](https://github.com/DimiDeKerf/nx-phone/compare/330bb3b...a8a830a)
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+### Shared model
+We can share our Phone model between our shop and stock app. This will keep the model in sync between the applications. In order to accomplish this, we're going to introduce the model lib.
+```
+ng g @nrwl/workspace:lib model
+```
 
-## Generate a library
+[Related commits](https://github.com/DimiDeKerf/nx-phone/compare/2999b11...64ce9de)
 
-Run `ng g @nrwl/angular:lib my-lib` to generate a library.
+### Stock
+Time to add another app: to manage our stock, we'll be using the stock app. This is similar as adding the shop app:
+```
+ng g @nrwl/angular:application stock
+```
+What is a stock app without knowing the stock of our phones? That's why we add the stock attribute to the phone model and update our data within the API. The stock attribute now becomes available. Be sure to configure the proxy to the backend before calling it.
 
-> You can also use any of the plugins above to generate libraries as well.
+[Related commits](https://github.com/DimiDeKerf/nx-phone/compare/107c5cd...0371eed)
 
-Libraries are sharable across libraries and applications. They can be imported from `@nx-phone/mylib`.
+## Dependencies
+As you continue to work on the monorepo, more apps and libs will be added and more dependencies gets introduced. Nx is able to figure out those dependencies then visualises them in a dependency graph. To get an overview of the current dependencies, you can run the following command:
+```
+npm run dep-graph
+```
 
-## Development server
+This will trigger the `nx dep-graph` command, which opens the browser with the resulting graph.
 
-Run `ng serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+<img src="assets/dependency-graph.png" width="500">
 
-## Code scaffolding
+Nx can also track which dependencies are affected by your latest changes and only run the tests for those dependencies, resulting in lower build times. You can do this by running:
+```
+npm run dep-graph
+```
 
-Run `ng g component my-component --project=my-app` to generate a new component.
+In this example, we've made a change to the shop app. As you can see, only the shop-e2e app is affected by this change.
 
-## Build
-
-Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev/angular) to learn more.
+<img src="assets/dependency-graph-affected.png" width="500">
